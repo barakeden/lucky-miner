@@ -1,5 +1,22 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { theme } from "../../styles/theme";
+
+const popIn = keyframes`
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+`;
+
+const shake = keyframes`
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  20%, 60% { transform: rotateY(180deg) translateX(-6px); }
+  40%, 80% { transform: rotateY(180deg) translateX(6px); }
+`;
+
+const winGlow = keyframes`
+  0%, 100% { box-shadow: 0 0 15px rgba(46, 204, 113, 0.4), inset 0 0 10px rgba(46, 204, 113, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(46, 204, 113, 0.8), inset 0 0 20px rgba(46, 204, 113, 0.4); }
+`;
 
 export const CardContainer = styled.div`
   perspective: 1000px;
@@ -11,13 +28,12 @@ export const CardInner = styled.div<{ $isFlipped: boolean }>`
   position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
-  transition: transform 0.6s;
+  transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-style: preserve-3d;
   transform: ${props => props.$isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
 `;
 
-export const CardFace = styled.div`
+const CardFace = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -26,48 +42,45 @@ export const CardFace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px ${theme.colors.shadow};
 `;
 
 export const CardBack = styled(CardFace) <{ $disabled: boolean }>`
   background: linear-gradient(135deg, ${theme.colors.cardBack} 0%, ${theme.colors.cardFront} 100%);
   border: 2px solid ${theme.colors.border};
-  cursor: ${props => props.$disabled ? 'not-allowed' : 'pointer'};
-  transition: all ${theme.transitions.normal};
+  cursor: ${props => props.$disabled ? 'default' : 'pointer'};
+  z-index: 2;
 
   &:hover {
-    transform: ${props => props.$disabled ? 'none' : 'scale(1.05)'};
-    border-color: ${props => props.$disabled ? theme.colors.border : theme.colors.gold};
-    box-shadow: ${props => props.$disabled ? 'none' : `0 6px 20px ${theme.colors.shadow}, 0 0 20px rgba(255, 215, 0, 0.3)`};
-  }
-
-  &::before {
-    content: '?';
-    font-size: ${theme.fontSize.xxxl};
-    font-weight: ${theme.fontWeight.bold};
-    color: ${theme.colors.gold};
-    opacity: 0.5;
+    ${props => !props.$disabled && css`
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    `}
   }
 `;
 
-export const CardFront = styled(CardFace) <{ $isWinning: boolean }>`
+export const CardFront = styled(CardFace) <{ $isWinning: boolean, $isVisible: boolean }>`
   background: ${props => props.$isWinning
-    ? `linear-gradient(135deg, ${theme.colors.win} 0%, ${theme.colors.winDark} 100%)`
-    : `linear-gradient(135deg, ${theme.colors.lose} 0%, ${theme.colors.loseDark} 100%)`
+    ? `linear-gradient(135deg, #1e4d2b 0%, #2ecc71 100%)`
+    : `linear-gradient(135deg, #4d1e1e 0%, #e74c3c 100%)`
   };
   transform: rotateY(180deg);
-  border: 2px solid ${props => props.$isWinning ? theme.colors.winDark : theme.colors.loseDark};
-  animation: revealPulse 0.5s ease;
-
-  @keyframes revealPulse {
-    0%, 100% { transform: rotateY(180deg) scale(1); }
-    50% { transform: rotateY(180deg) scale(1.1); }
-  }
+  border: 3px solid ${props => props.$isWinning ? '#2ecc71' : '#e74c3c'};
+  
+  ${props => props.$isVisible && (props.$isWinning
+    ? css`animation: ${winGlow} 1.5s infinite ease-in-out 1s;`
+    : css`animation: ${shake} 0.5s cubic-bezier(.36,.07,.19,.97) 0.6s both;`
+  )}
 `;
 
-export const IconWrapper = styled.div`
+export const IconWrapper = styled.div<{ $isRevealed: boolean; $isWinning: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5));
+  opacity: 0; 
+
+  ${props => props.$isRevealed && (
+    props.$isWinning
+      ? css`animation: ${popIn} 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;`
+      : css`animation: ${keyframes`to { opacity: 1; }`} 0.2s 0.2s both;`
+  )}
 `;

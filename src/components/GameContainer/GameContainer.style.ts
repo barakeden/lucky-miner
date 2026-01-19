@@ -1,5 +1,34 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { theme } from "../../styles/theme";
+
+const shine = keyframes`
+  0% { background-position: -200% 0; }
+  90%, 100% { background-position: 200% 0; }
+`;
+
+export const Title = styled.h1`
+  text-align: center;
+  font-size: ${theme.fontSize.xxxl};
+  font-weight: ${theme.fontWeight.bold};
+  margin: 0;
+
+  background: 
+    linear-gradient(
+      120deg, 
+      transparent 30%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      transparent 70%
+    ),
+    linear-gradient(135deg, ${theme.colors.gold} 40%, ${theme.colors.win} 80%);
+
+  background-size: 200% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 8px ${theme.colors.shadow};
+  animation: ${shine} 5s infinite ease-in-out;
+`;
 
 export const Container = styled.div`
   height: 100vh;
@@ -20,20 +49,4 @@ export const GameWrapper = styled.div`
   justify-content: space-evenly;
   gap: ${theme.spacing.sm};
   padding: ${theme.spacing.md} 0;
-`;
-
-export const Title = styled.h1`
-  text-align: center;
-  font-size: ${theme.fontSize.xxxl};
-  font-weight: ${theme.fontWeight.bold};
-  margin: 0;
-  background: linear-gradient(135deg, ${theme.colors.gold} 40%, ${theme.colors.win} 80%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px ${theme.colors.shadow};
-
-  @media (max-width: 768px) {
-    font-size: ${theme.fontSize.xl};
-  }
 `;

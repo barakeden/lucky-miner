@@ -3,8 +3,6 @@ import type { StatusMessageProps } from '../../types/game';
 import { MessageContainer, MessageContent, SpinningIcon } from './StatusMessage.style';
 
 export const StatusMessage: React.FC<StatusMessageProps> = ({ status, currentScore }) => {
-  if (status === 'idle') return null;
-
   return (
     <MessageContainer>
       {status === 'loading' && (

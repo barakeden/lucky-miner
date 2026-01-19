@@ -4,9 +4,11 @@ import { theme } from "../../styles/theme";
 export const ControlsContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: ${theme.spacing.md};
   padding: 0;
   flex-wrap: wrap;
+  min-height: 64px;
 `;
 
 export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`

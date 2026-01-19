@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Confetti from 'react-confetti';
 import { fetchBoard } from '../../api/gameApi';
 import { Grid } from '../Grid/Grid';
 import { ScoreBoard } from '../ScoreBoard/ScoreBoard';
@@ -7,12 +8,23 @@ import { StatusMessage } from '../StatusMessage/StatusMessage';
 import type { Game, GameStatus } from '../../types/game';
 import { Container, GameWrapper, Title } from './GameContainer.style';
 
-
 export const GameContainer: React.FC = () => {
   const [gameData, setGameData] = useState<Game | null>(null);
   const [revealedCells, setRevealedCells] = useState<Set<string>>(new Set());
   const [currentScore, setCurrentScore] = useState(0);
   const [status, setStatus] = useState<GameStatus>('idle');
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     startNewGame();
@@ -59,7 +71,6 @@ export const GameContainer: React.FC = () => {
       setStatus('lost');
       setCurrentScore(0);
 
-      // Reveal all mines
       const allMines = new Set<string>();
       gameData.board.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
@@ -81,6 +92,8 @@ export const GameContainer: React.FC = () => {
     startNewGame();
   };
 
+  const isWinner = status === 'won' || status === 'cashed_out';
+
   if (!gameData) {
     return (
       <Container>
@@ -101,6 +114,17 @@ export const GameContainer: React.FC = () => {
 
   return (
     <Container>
+      {isWinner && (
+        <Confetti
+          width={windowSize.width}
+          height={windowSize.height}
+          recycle={false}
+          numberOfPieces={status === 'won' ? 800 : 500}
+          gravity={0.15}
+          colors={['#FFD700', '#2ecc71', '#ffffff', '#f1c40f']}
+        />
+      )}
+
       <GameWrapper>
         <Title>💎 Lucky Miner 💣</Title>
         <ScoreBoard

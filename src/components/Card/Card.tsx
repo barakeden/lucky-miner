@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Gem, Bomb } from 'lucide-react'; 
+import { Gem, Bomb } from 'lucide-react';
 import { CardContainer, CardInner, CardBack, CardFront, IconWrapper } from './Card.style';
-import type { CardProps } from '../../types/game';  
-  
+import type { CardProps } from '../../types/game';
+
 export const Card: React.FC<CardProps> = ({ isRevealed, isWinning, onFlip, disabled }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -24,8 +24,8 @@ export const Card: React.FC<CardProps> = ({ isRevealed, isWinning, onFlip, disab
           $disabled={disabled || isRevealed}
           onClick={handleClick}
         />
-        <CardFront $isWinning={isWinning}>
-          <IconWrapper>
+        <CardFront $isWinning={isWinning} $isVisible={isRevealed}>
+          <IconWrapper $isRevealed={isRevealed} $isWinning={isWinning}>
             {isWinning ? (
               <Gem size={48} color="#ffffff" strokeWidth={2.5} />
             ) : (
