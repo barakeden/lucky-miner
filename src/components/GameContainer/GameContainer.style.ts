@@ -37,7 +37,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding: ${theme.spacing.md};
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const GameWrapper = styled.div`
