@@ -41,3 +41,26 @@ export interface GridProps {
   onCellFlip: (row: number, col: number) => void;
   disabled: boolean;
 }
+
+export interface UseGameLogicReturn {
+  gameData: Game | null;
+  revealedCells: Set<string>;
+  currentScore: number;
+  status: GameStatus;
+  simplifiedBoard: boolean[][];
+  canCashOut: boolean;
+  isGridDisabled: boolean;
+  isWinner: boolean;
+  handleCellFlip: (row: number, col: number) => void;
+  handleCashOut: () => void;
+  handleRestart: () => void;
+}
+
+export interface WindowSize {
+  width: number;
+  height: number;
+}
+
+export interface AnimatedNumberProps {
+  value: number;
+}

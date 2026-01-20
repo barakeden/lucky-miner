@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { Card } from '../Card/Card';
 import { GridContainer } from './Grid.style';
 import type { GridProps } from '../../types/game';
 
-export const Grid: React.FC<GridProps> = ({ board, revealedCells, onCellFlip, disabled }) => {
+export const Grid = memo<GridProps>(({ board, revealedCells, onCellFlip, disabled }) => {
   return (
     <GridContainer>
       {board.map((row, rowIndex) =>
@@ -23,4 +24,6 @@ export const Grid: React.FC<GridProps> = ({ board, revealedCells, onCellFlip, di
       )}
     </GridContainer>
   );
-};
+});
+
+Grid.displayName = 'Grid';  

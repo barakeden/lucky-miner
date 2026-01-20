@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { Trophy, Skull, DollarSign, Loader2 } from 'lucide-react';
 import type { StatusMessageProps } from '../../types/game';
 import { MessageContainer, MessageContent, SpinningIcon } from './StatusMessage.style';
 
-export const StatusMessage: React.FC<StatusMessageProps> = ({ status, currentScore }) => {
+export const StatusMessage = memo<StatusMessageProps>(({ status, currentScore }) => {
   return (
     <MessageContainer>
       {status === 'loading' && (
@@ -33,4 +34,6 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({ status, currentSco
       )}
     </MessageContainer>
   );
-};
+});
+
+StatusMessage.displayName = 'StatusMessage';

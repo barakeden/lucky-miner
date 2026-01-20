@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { DollarSign, RotateCcw } from 'lucide-react';
 import { ControlsContainer, Button } from './Controls.style';
 import type { ControlsProps } from '../../types/game';
 
-export const Controls: React.FC<ControlsProps> = ({ onCashOut, onRestart, status, canCashOut }) => {
+export const Controls = memo<ControlsProps>(({ onCashOut, onRestart, status, canCashOut }) => {
   const showCashOut = status === 'playing';
   const showRestart = ['lost', 'cashed_out', 'won'].includes(status);
 
@@ -30,4 +31,6 @@ export const Controls: React.FC<ControlsProps> = ({ onCashOut, onRestart, status
       )}
     </ControlsContainer>
   );
-};
+});
+
+Controls.displayName = 'Controls';
